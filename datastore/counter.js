@@ -23,11 +23,11 @@ const readCounter = (callback) => {
       callback(null, Number(fileData));
     }
   });
-};
+}; //2
 
-const writeCounter = (count, callback) => {
-  var counterString = zeroPaddedNumber(count);
-  fs.writeFile(exports.counterFile, counterString, (err) => {
+const writeCounter = (count, callback) => { //3
+  var counterString = zeroPaddedNumber(count); // 0003
+  fs.writeFile(exports.counterFile, counterString, (err) => { //0003
     if (err) {
       throw ('error writing counter');
     } else {
@@ -38,9 +38,20 @@ const writeCounter = (count, callback) => {
 
 // Public API - Fix this function //////////////////////////////////////////////
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+exports.getNextUniqueId = (callback) => {
+  //get the old id
+  //set new id
+  //create file with the new id name
+  readCounter((err, fileData) => {
+    if(err){
+      throw ('error reading counter');
+    }
+    writeCounter(fileData + 1, (err, fileData) => {
+      callback(err, fileData);
+    })
+  });
+  // counter = counter + 1;
+  // return zeroPaddedNumber(counter);
 };
 
 
